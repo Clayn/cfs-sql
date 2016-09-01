@@ -16,22 +16,18 @@
  */
 package net.bplaced.clayn.cfs.impl.sql;
 
-import java.sql.SQLException;
 import net.bplaced.clayn.cfs.CFileSystem;
-import net.bplaced.clayn.cfs.Directory;
-import net.bplaced.clayn.cfs.FileSettings;
+import net.bplaced.clayn.cfs.test.CFileSystemTest;
 import net.bplaced.clayn.cfs.test.base.sql.BaseSQLTest;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *
  * @author Clayn
  */
-public class SQLCFileSystemTest extends BaseSQLTest
+public class SQLCFileSystemTest extends CFileSystemTest implements BaseSQLTest
 {
     
     public SQLCFileSystemTest()
@@ -56,46 +52,9 @@ public class SQLCFileSystemTest extends BaseSQLTest
     {
     }
 
-    /**
-     * Test of getRoot method, of class SQLCFileSystem.
-     */
-    @Test
-    public void testGetRoot() throws Exception
+    @Override
+    public CFileSystem getFileSystem() throws Exception
     {
-        System.out.println("getRoot");
-        SQLCFileSystem cfs=new SQLCFileSystem(this::getDB);
-        Assert.assertNotNull(cfs);
-        Directory root=cfs.getRoot();
-        Assert.assertNotNull(root);
-        Assert.assertEquals("/", root.getName());
-        Directory root2=cfs.getRoot();
-        Assert.assertEquals(root.getName(), root2.getName());
+        return getSQLFileSystem();
     }
-    
-    @Test
-    public void testCreateFS() throws Exception
-    {
-        SQLCFileSystem cfs=new SQLCFileSystem(this::getDB);
-        Assert.assertNotNull(cfs);
-        Directory root=cfs.getRoot();
-        Assert.assertNotNull(root);
-        Assert.assertTrue(root.exists());
-    }
-
-    /**
-     * Test of getFileSettings method, of class SQLCFileSystem.
-     * @throws java.sql.SQLException
-     */
-    @Test
-    public void testGetFileSettings() throws SQLException
-    {
-        System.out.println("getFileSettings");
-        CFileSystem cfs=new SQLCFileSystem(this::getDB);
-        Assert.assertNotNull(cfs);
-        FileSettings set=cfs.getFileSettings();
-        Assert.assertNotNull(set);
-        Assert.assertTrue(set.getCreateOnAccess()==cfs.getFileSettings().getCreateOnAccess());
-        
-    }
-    
 }

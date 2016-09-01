@@ -104,6 +104,13 @@
             <artifactId>findbugs-annotations</artifactId>
             <version>3.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cfs-test</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
     </dependencies>
     <name>Clayn File System SQL-Impl</name>
 </project>
