@@ -17,16 +17,16 @@
 package net.bplaced.clayn.cfs.test.base.sql;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import net.bplaced.clayn.cfs.CFileSystem;
+import net.bplaced.clayn.cfs.impl.sql.SQLCFileSystem;
 import net.bplaced.clayn.cfs.impl.sql.SQLCFileSystemTest;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.rules.TemporaryFolder;
 
@@ -34,47 +34,20 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Clayn
  */
-public class BaseSQLTest
+public interface BaseSQLTest
 {
-    private String url;
-    private String user="sa";
-    private String password="";
-    public BaseSQLTest()
-    {
-    }
-    
+    public static StringProperty url=new SimpleStringProperty();
     @BeforeClass
-    public static void setUpClass()
+    public static void setUpClass() throws ClassNotFoundException
     {
-    }
-    
-    @AfterClass
-    public static void tearDownClass()
-    {
-    }
-    
-    @Before
-    public void setUp() throws ClassNotFoundException, IOException
-    {
-        TemporaryFolder folder=new TemporaryFolder();
-        folder.create();
-        File db = folder.newFile("testdb");
-        url="jdbc:h2:"+db.toURI().toURL();
-        System.out.println("Using database: "+url);
-        //url="jdbc:h2:/Users/Clayn/h2/cfs/sql";
         Class.forName("org.h2.Driver");
     }
     
-    @After
-    public void tearDown()
-    {
-    }
-    
-    protected Connection getDB()
+    public default Connection getDB()
     {
         try
         {
-            return DriverManager.getConnection(url, user, password);
+            return DriverManager.getConnection(url.get(), "sa", "");
         } catch (SQLException ex)
         {
             Logger.getLogger(SQLCFileSystemTest.class.getName()).log(Level.SEVERE,
@@ -83,9 +56,15 @@ public class BaseSQLTest
         }
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    public default CFileSystem getSQLFileSystem() throws Exception
+    {
+        TemporaryFolder folder=new TemporaryFolder();
+        folder.create();
+        File db = folder.newFile("testdb");
+        url.set("jdbc:h2:"+db.toURI().toURL());
+        System.out.println("Using database: "+url);
+        //url="jdbc:h2:/Users/Clayn/h2/cfs/sql";
+        
+        return new SQLCFileSystem(this::getDB);
+    }
 }

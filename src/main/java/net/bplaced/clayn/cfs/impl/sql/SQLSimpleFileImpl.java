@@ -1,5 +1,6 @@
 package net.bplaced.clayn.cfs.impl.sql;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -109,7 +110,7 @@ public class SQLSimpleFileImpl implements SimpleFile
             JDBCExecutor.connect(con)
                     .put(parent.getId())
                     .put(name)
-                    .put(-1)
+                    .put(0)
                     .update(sql);
             con.commit();
             JDBCExecutor.connect(con)
@@ -321,7 +322,7 @@ public class SQLSimpleFileImpl implements SimpleFile
     {
         if (!exists())
         {
-            return -1;
+            throw new FileNotFoundException("File "+toString()+" does not exist");
         }
         String sel = "SELECT bytes as size FROM " + SQLCFileSystem.FILE_TABLE + " WHERE parent=? AND name=?";
         try (Connection con = dbAccess.get(); PreparedStatement stat = con.prepareStatement(sel))
