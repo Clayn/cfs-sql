@@ -16,6 +16,7 @@
  */
 package net.bplaced.clayn.cfs.impl.sql;
 
+import java.util.Arrays;
 import net.bplaced.clayn.cfs.CFileSystem;
 import net.bplaced.clayn.cfs.test.SimpleFileTest;
 import net.bplaced.clayn.cfs.test.base.sql.BaseSQLTest;
@@ -29,6 +30,7 @@ public class SQLSimpleFileImplTest extends SimpleFileTest implements BaseSQLTest
     
     public SQLSimpleFileImplTest()
     {
+        runningTests.addAll(Arrays.asList(TEST_ALL));
     }
     
 
