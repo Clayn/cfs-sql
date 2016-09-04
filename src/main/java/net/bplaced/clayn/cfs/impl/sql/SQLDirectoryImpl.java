@@ -439,7 +439,7 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
                 this::runtimeDelete);
         try (Connection con = dbAccess.get())
         {
-            String sql = "DELETE FROM cfs_direcctory WHERE id=?";
+            String sql = "DELETE FROM cfs_directory WHERE id=?";
             try (PreparedStatement stat = con.prepareStatement(sql))
             {
                 stat.setLong(1, id);

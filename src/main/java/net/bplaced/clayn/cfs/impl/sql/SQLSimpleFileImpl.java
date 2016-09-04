@@ -58,10 +58,6 @@ public class SQLSimpleFileImpl implements SimpleFile
     @Override
     public boolean exists()
     {
-        if (cached)
-        {
-            return cachedExist;
-        }
         if (!parent.exists())
         {
             return false;
@@ -133,10 +129,6 @@ public class SQLSimpleFileImpl implements SimpleFile
     @Override
     public void delete() throws IOException
     {
-        if (cached)
-        {
-            cached = false;
-        }
         String sql2="DELETE FROM cfs_modification WHERE name=? AND parent=?";
         String sql = "DELETE FROM " + SQLCFileSystem.FILE_TABLE + " WHERE parent=? AND name=?";
         try (Connection con = dbAccess.get())
