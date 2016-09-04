@@ -342,6 +342,8 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
     @Override
     public List<Directory> listDirectories() throws IOException
     {
+        if(!exists())
+            return new ArrayList<>();
         try (Connection con = dbAccess.get())
         {
             List<Directory> dir;
