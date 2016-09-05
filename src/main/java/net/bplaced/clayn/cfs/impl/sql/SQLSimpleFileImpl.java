@@ -129,11 +129,11 @@ public class SQLSimpleFileImpl implements SimpleFile
     @Override
     public void delete() throws IOException
     {
-        String sql2="DELETE FROM cfs_modification WHERE name=? AND parent=?";
+        String sql2 = "DELETE FROM cfs_modification WHERE name=? AND parent=?";
         String sql = "DELETE FROM " + SQLCFileSystem.FILE_TABLE + " WHERE parent=? AND name=?";
         try (Connection con = dbAccess.get())
         {
-            try(PreparedStatement stat=con.prepareStatement(sql2))
+            try (PreparedStatement stat = con.prepareStatement(sql2))
             {
                 stat.setString(1, name);
                 stat.setLong(2, parent.getId());
@@ -302,7 +302,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                                 Level.SEVERE, null, ex);
                         throw new RuntimeException(ex);
                     }
-                    
+
         });
         reader.set(t);
         t.start();
@@ -314,10 +314,12 @@ public class SQLSimpleFileImpl implements SimpleFile
     {
         if (!exists())
         {
-            throw new FileNotFoundException("File "+toString()+" does not exist");
+            throw new FileNotFoundException(
+                    "File " + toString() + " does not exist");
         }
         String sel = "SELECT bytes as size FROM " + SQLCFileSystem.FILE_TABLE + " WHERE parent=? AND name=?";
-        try (Connection con = dbAccess.get(); PreparedStatement stat = con.prepareStatement(sel))
+        try (Connection con = dbAccess.get(); PreparedStatement stat = con.prepareStatement(
+                sel))
         {
             stat.setLong(1, parent.getId());
             stat.setString(2, name);

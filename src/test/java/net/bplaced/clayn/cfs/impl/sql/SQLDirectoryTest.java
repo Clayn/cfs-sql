@@ -17,11 +17,10 @@ public class SQLDirectoryTest extends DirectoryTest implements BaseSQLTest
         runningTests.addAll(Arrays.asList(TEST_ALL));
     }
 
-    
     @Override
     public CFileSystem getFileSystem() throws Exception
     {
         return getSQLFileSystem();
     }
-    
+
 }

@@ -54,8 +54,8 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
     private final Supplier<Connection> dbAccess;
     private long id = -1;
 //    private final Thread directoryMonitor;
-    private boolean active=false;
-    
+    private boolean active = false;
+
     public SQLDirectoryImpl(String name, SQLDirectoryImpl parent,
             Supplier<Connection> dbAccess, long id)
     {
@@ -75,7 +75,7 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
     private Runnable getWatch()
     {
         return new Runnable()
-        { 
+        {
             @Override
             public void run()
             {
@@ -105,10 +105,11 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
                                             time));
                                 }
                                 mods.stream().sorted(Comparator.comparingLong(
-                                        FileModification::getTimeStamp)).forEach(SQLDirectoryImpl.this::dispatchModification);
+                                        FileModification::getTimeStamp)).forEach(
+                                                SQLDirectoryImpl.this::dispatchModification);
                             }
                             stat.close();
-                        }catch (SQLException ex)
+                        } catch (SQLException ex)
                         {
                             Logger.getLogger(
                                     SQLDirectoryImpl.class.getName()).log(
@@ -117,7 +118,7 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
                             throw new RuntimeException(ex);
                         }
                         Thread.sleep(500);
-                    }catch (InterruptedException ex)
+                    } catch (InterruptedException ex)
                     {
                         Logger.getLogger(SQLDirectoryImpl.class.getName()).log(
                                 Level.SEVERE,
@@ -342,8 +343,10 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
     @Override
     public List<Directory> listDirectories() throws IOException
     {
-        if(!exists())
+        if (!exists())
+        {
             return new ArrayList<>();
+        }
         try (Connection con = dbAccess.get())
         {
             List<Directory> dir;
@@ -373,14 +376,17 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
         }
     }
 
-    void invokeWatcher(FileModification ...fileMod)
+    void invokeWatcher(FileModification... fileMod)
     {
-        if(!active)
+        if (!active)
+        {
             return;
+        }
         Arrays.stream(fileMod).sorted(Comparator.comparingLong(
-                                        FileModification::getTimeStamp)).forEach(this::dispatchModification);
+                FileModification::getTimeStamp)).forEach(
+                        this::dispatchModification);
     }
-    
+
     private boolean safeNext(ResultSet set)
     {
         try
@@ -412,14 +418,14 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
     public void activate()
     {
         //directoryMonitor.start();
-        active=true;
+        active = true;
     }
 
     @Override
     public void deactivate()
     {
         //directoryMonitor.interrupt();
-        active=false;
+        active = false;
     }
 
     private void runtimeDelete(Deletable del)
