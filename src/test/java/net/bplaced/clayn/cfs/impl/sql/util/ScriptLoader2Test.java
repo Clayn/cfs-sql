@@ -35,31 +35,32 @@ import org.junit.Test;
  */
 public class ScriptLoader2Test
 {
-    private static final String[] SCRIPTS=new String[]
+
+    private static final String[] SCRIPTS = new String[]
     {
         "SELECT * FROM table WHERE cond=?",
         "INSERT INTO table (c1,c2,c3) VALUES(?,?,?)"
     };
-    
+
     public ScriptLoader2Test()
     {
     }
-    
+
     @BeforeClass
     public static void setUpClass()
     {
     }
-    
+
     @AfterClass
     public static void tearDownClass()
     {
     }
-    
+
     @Before
     public void setUp()
     {
     }
-    
+
     @After
     public void tearDown()
     {
@@ -67,6 +68,7 @@ public class ScriptLoader2Test
 
     /**
      * Test of loadScripts method, of class ScriptLoader2.
+     *
      * @throws java.io.IOException
      */
     @Test
@@ -74,42 +76,47 @@ public class ScriptLoader2Test
     {
         System.out.println("loadScripts");
         List<Script> scripts;
-        try(InputStream in=getClass().getResourceAsStream("/sql/scripts/TestScript.sql"))
+        try (InputStream in = getClass().getResourceAsStream(
+                "/sql/scripts/TestScript.sql"))
         {
-            scripts=ScriptLoader2.loadScripts(in).getScripts();
+            scripts = ScriptLoader2.loadScripts(in).getScripts();
         }
         assertNotNull(scripts);
         assertEquals(SCRIPTS.length, scripts.size());
-        scripts.stream().map((sc) ->
-        {
-            assertFalse(sc.getSql().endsWith(";"));
-            return sc;
-        }).forEach((sc) ->
-        {
-            assertEquals(sc.getSql(), sc.getSql().trim());
+        scripts.stream().map((sc)
+                -> 
+                {
+                    assertFalse(sc.getSql().endsWith(";"));
+                    return sc;
+        }).forEach((sc)
+                -> 
+                {
+                    assertEquals(sc.getSql(), sc.getSql().trim());
         });
-        List<Script> tmp=new ArrayList<>(scripts);
+        List<Script> tmp = new ArrayList<>(scripts);
         Collections.sort(tmp, Comparator.comparingInt(Script::getId));
-        for(int i=0;i<SCRIPTS.length;++i)
+        for (int i = 0; i < SCRIPTS.length; ++i)
         {
-            assertTrue(containsName("Script_"+i,tmp));
+            assertTrue(containsName("Script_" + i, tmp));
             assertEquals(SCRIPTS[i], tmp.get(i).getSql());
         }
     }
-    
-    private boolean containsName(String name,List<Script> scripts)
+
+    private boolean containsName(String name, List<Script> scripts)
     {
-        return scripts.stream().parallel().map(Script::getName).filter(name::equals).findAny().isPresent();
+        return scripts.stream().parallel().map(Script::getName).filter(
+                name::equals).findAny().isPresent();
     }
-    
+
     @Test
     public void testNamesMissing() throws Exception
     {
         System.out.println("nameMissing");
         List<Script> scripts;
-        try(InputStream in=getClass().getResourceAsStream("/sql/scripts/MissingName.sql"))
+        try (InputStream in = getClass().getResourceAsStream(
+                "/sql/scripts/MissingName.sql"))
         {
-            scripts=ScriptLoader2.loadScripts(in).getScripts();
+            scripts = ScriptLoader2.loadScripts(in).getScripts();
         }
         assertNotNull(scripts);
         assertEquals(1, scripts.size());

@@ -27,16 +27,15 @@ import net.bplaced.clayn.cfs.test.base.sql.BaseSQLTest;
  */
 public class SQLSimpleFileImplTest extends SimpleFileTest implements BaseSQLTest
 {
-    
+
     public SQLSimpleFileImplTest()
     {
         runningTests.addAll(Arrays.asList(TEST_ALL));
     }
-    
 
     @Override
     public CFileSystem getFileSystem() throws Exception
     {
         return getSQLFileSystem();
-    }  
+    }
 }

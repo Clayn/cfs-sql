@@ -30,25 +30,23 @@ import org.junit.BeforeClass;
  */
 public class SQLCFileSystemTest extends CFileSystemTest implements BaseSQLTest
 {
-    
+
     public SQLCFileSystemTest()
     {
-        runningTests.addAll(Arrays.asList(TEST_CREATE,TEST_ROOT,TEST_SETTINGS));
+        runningTests.addAll(Arrays.asList(TEST_CREATE, TEST_ROOT, TEST_SETTINGS));
     }
-    
+
     @BeforeClass
     public static void setUpClass()
     {
-        
+
     }
-    
-    
-    
+
     @AfterClass
     public static void tearDownClass()
     {
     }
-    
+
     @After
     public void tearDown()
     {

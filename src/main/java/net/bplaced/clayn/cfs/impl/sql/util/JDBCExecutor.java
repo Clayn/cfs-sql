@@ -84,7 +84,7 @@ public class JDBCExecutor
             return stat;
         } catch (SQLException ex)
         {
-            if(stat!=null)
+            if (stat != null)
             {
                 stat.close();
             }
@@ -111,16 +111,18 @@ public class JDBCExecutor
     }
 
     /**
-     * Uses the given sql to execute an update on the connected database. Using this 
-     * method overwrites all sql previous set by {@link #script(java.lang.String)}.
+     * Uses the given sql to execute an update on the connected database. Using
+     * this method overwrites all sql previous set by
+     * {@link #script(java.lang.String)}.
+     *
      * @param sql the sql to use for the update
      * @return the result of the update
-     * @throws SQLException SQLException if a database access error occurs or this method is
-     * called on a closed connection
+     * @throws SQLException SQLException if a database access error occurs or
+     * this method is called on a closed connection
      * @since 0.1
-     * @see #update() 
-     * @see #query() 
-     * @see #query(java.lang.String) 
+     * @see #update()
+     * @see #query()
+     * @see #query(java.lang.String)
      */
     public int update(String sql) throws SQLException
     {
@@ -136,9 +138,9 @@ public class JDBCExecutor
      * called on a closed PreparedStatement or the SQL statement does not return
      * a ResultSet object
      * @since 0.1
-     * @see #query(java.lang.String) 
-     * @see #update() 
-     * @see #update(java.lang.String) 
+     * @see #query(java.lang.String)
+     * @see #update()
+     * @see #update(java.lang.String)
      */
     public ResultSet query() throws SQLException
     {

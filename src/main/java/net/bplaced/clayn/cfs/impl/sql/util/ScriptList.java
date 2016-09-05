@@ -27,6 +27,7 @@ import java.util.List;
  */
 public class ScriptList
 {
+
     private final List<Script> scripts;
 
     public ScriptList(List<Script> scripts)
@@ -38,17 +39,17 @@ public class ScriptList
     {
         return scripts;
     }
-    
-    
+
     public List<Script> getSorted()
     {
-        List<Script> tmp=new ArrayList<>(scripts);
+        List<Script> tmp = new ArrayList<>(scripts);
         Collections.sort(tmp, Comparator.comparingInt(Script::getId));
         return Collections.unmodifiableList(tmp);
     }
+
     public Script getScript(String name)
     {
-        return scripts.stream().parallel().filter((sc)->sc.getName().equals(
+        return scripts.stream().parallel().filter((sc) -> sc.getName().equals(
                 name)).findFirst().get();
     }
 }

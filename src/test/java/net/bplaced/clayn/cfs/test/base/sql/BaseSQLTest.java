@@ -36,13 +36,15 @@ import org.junit.rules.TemporaryFolder;
  */
 public interface BaseSQLTest
 {
-    public static StringProperty url=new SimpleStringProperty();
+
+    public static StringProperty url = new SimpleStringProperty();
+
     @BeforeClass
     public static void setUpClass() throws ClassNotFoundException
     {
         Class.forName("org.h2.Driver");
     }
-    
+
     public default Connection getDB()
     {
         try
@@ -50,7 +52,8 @@ public interface BaseSQLTest
             return DriverManager.getConnection(url.get(), "sa", "");
         } catch (SQLException ex)
         {
-            Logger.getLogger(SQLCFileSystemTest.class.getName()).log(Level.SEVERE,
+            Logger.getLogger(SQLCFileSystemTest.class.getName()).log(
+                    Level.SEVERE,
                     null, ex);
             throw new RuntimeException(ex);
         }
@@ -58,13 +61,13 @@ public interface BaseSQLTest
 
     public default CFileSystem getSQLFileSystem() throws Exception
     {
-        TemporaryFolder folder=new TemporaryFolder();
+        TemporaryFolder folder = new TemporaryFolder();
         folder.create();
         File db = folder.newFile("testdb");
-        url.set("jdbc:h2:"+db.toURI().toURL());
-        System.out.println("Using database: "+url);
+        url.set("jdbc:h2:" + db.toURI().toURL());
+        System.out.println("Using database: " + url);
         //url="jdbc:h2:/Users/Clayn/h2/cfs/sql";
-        
+
         return new SQLCFileSystem(this::getDB);
     }
 }

@@ -24,6 +24,7 @@ import java.util.Objects;
  */
 public final class Script
 {
+
     private final String name;
     private final int id;
     private final String sql;
@@ -39,10 +40,10 @@ public final class Script
     {
         return id;
     }
-    
-    public Script replace(String match,String rep)
+
+    public Script replace(String match, String rep)
     {
-        return new Script(name, id, sql.replace(match,rep));
+        return new Script(name, id, sql.replace(match, rep));
     }
 
     public String getName()
@@ -90,6 +91,5 @@ public final class Script
         }
         return true;
     }
-    
-    
+
 }

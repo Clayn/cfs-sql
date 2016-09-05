@@ -16,9 +16,9 @@ import java.util.logging.Logger;
 /**
  * The ScriptLoader is a utility tool that can load scripts from an input
  * stream. You can read all scripts at once or each one by one. The ScriptLoader
- * keeps track of the scripts so they can be accessed using its index. The main 
- * use of this class is to store predefined skript in a separated file and then 
- * get the sql statements to prepare statements. 
+ * keeps track of the scripts so they can be accessed using its index. The main
+ * use of this class is to store predefined skript in a separated file and then
+ * get the sql statements to prepare statements.
  *
  * @author Clayn
  * @since 0.1
