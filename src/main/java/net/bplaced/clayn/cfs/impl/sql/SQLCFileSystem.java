@@ -53,7 +53,14 @@ public class SQLCFileSystem implements CFileSystem
     {
         this.dbAccess = dbAccess;
         loadScripts();
-        createTables();
+        try
+        {
+            checkIntegrity();
+        }
+        catch(DatabaseIntegrityException ex)
+        {
+            createTables();
+        }
     }
 
     private void loadScripts() throws SQLException
