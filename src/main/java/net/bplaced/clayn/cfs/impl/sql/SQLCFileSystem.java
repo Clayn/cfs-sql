@@ -53,7 +53,14 @@ public class SQLCFileSystem implements CFileSystem
     {
         this.dbAccess = dbAccess;
         loadScripts();
-        createTables();
+        try
+        {
+            checkIntegrity();
+        }
+        catch(DatabaseIntegrityException ex)
+        {
+            createTables();
+        }
     }
 
     private void loadScripts() throws SQLException
@@ -110,7 +117,6 @@ public class SQLCFileSystem implements CFileSystem
     @Override
     public Directory getRoot() throws IOException
     {
-        checkIntegrity();
         PreparedStatement stat = null;
         ResultSet set = null;
         try (Connection con = dbAccess.get())
