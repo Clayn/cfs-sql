@@ -21,8 +21,7 @@ package net.bplaced.clayn.cfs.impl.sql.util;
  * anymore.
  * 
  * @author Clayn <clayn_osmato@gmx.de>
- * @since 0.2
- */
+ * @since 0.2.0 */
 public class DatabaseIntegrityException extends RuntimeException
 {
 

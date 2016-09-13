@@ -25,8 +25,7 @@ import java.sql.SQLException;
  * The DBChecker is a toolset to verify the integrity of a database. The available 
  * checks will be extended in further releases.
  * @author Clayn <clayn_osmato@gmx.de>
- * @since 0.2
- */
+ * @since 0.2.0 */
 public final class DBChecker
 {
     
