@@ -17,11 +17,12 @@
 package net.bplaced.clayn.cfs.impl.sql.util;
 
 /**
- * Exception thrown in cases where the integrity of the databse can't be ensured 
+ * Exception thrown in cases where the integrity of the databse can't be ensured
  * anymore.
- * 
+ *
  * @author Clayn <clayn_osmato@gmx.de>
- * @since 0.2.0 */
+ * @since 0.2.0
+ */
 public class DatabaseIntegrityException extends RuntimeException
 {
 
@@ -49,5 +50,5 @@ public class DatabaseIntegrityException extends RuntimeException
     {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

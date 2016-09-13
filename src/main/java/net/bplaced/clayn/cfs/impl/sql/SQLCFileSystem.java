@@ -56,8 +56,7 @@ public class SQLCFileSystem implements CFileSystem
         try
         {
             checkIntegrity();
-        }
-        catch(DatabaseIntegrityException ex)
+        } catch (DatabaseIntegrityException ex)
         {
             createTables();
         }
@@ -85,14 +84,15 @@ public class SQLCFileSystem implements CFileSystem
 
     private void checkIntegrity()
     {
-        if(!DBChecker.tableExists(dbAccess.get(), FILE_TABLE)||!DBChecker.tableExists(
+        if (!DBChecker.tableExists(dbAccess.get(), FILE_TABLE) || !DBChecker.tableExists(
                 dbAccess.get(), DIRECTORY_TABLE))
         {
-            throw new DatabaseIntegrityException("The integrity of the database can't be ensured anymore. "
+            throw new DatabaseIntegrityException(
+                    "The integrity of the database can't be ensured anymore. "
                     + "Possible reason: either file or directory table can't be found");
         }
     }
-    
+
     private void createTables() throws SQLException
     {
         try (Connection con = dbAccess.get())

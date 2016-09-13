@@ -98,7 +98,8 @@ public class JDBCExecutor
      * {@link #put(java.lang.Object)} will set to the executed statement.
      *
      * @return the index used for the next parameter.
-     * @since 0.2.0     */
+     * @since 0.2.0
+     */
     public int currentIndex()
     {
         return index;
