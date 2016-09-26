@@ -1,5 +1,6 @@
 package net.bplaced.clayn.cfs.impl.sql;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -176,9 +177,9 @@ public class SQLSimpleFileImpl implements SimpleFile
                 {
                     in = set.getBinaryStream("data");
                 }
-                con.commit();
-                con.setAutoCommit(old);
-                set.close();
+//                con.commit();
+//                con.setAutoCommit(old);
+//                set.close();
             }
         } catch (SQLException ex)
         {
@@ -186,7 +187,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                     null, ex);
             throw new IOException(ex);
         }
-        return in;
+        return in==null?new ByteArrayInputStream(new byte[0]):in;
     }
 
     @Override
