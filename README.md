@@ -7,6 +7,7 @@
 - Windows 7 (64 bit)
 - Mac OS X El Capitan (64 bit) 
 - Linux Mint 18 (64 bit)
+
 ###### Databases (JDBC Driver)
 - H2 (1.4.192)
 - MySQL (6.0.4)
