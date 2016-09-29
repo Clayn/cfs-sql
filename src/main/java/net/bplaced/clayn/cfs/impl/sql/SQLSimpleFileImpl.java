@@ -110,16 +110,13 @@ public class SQLSimpleFileImpl implements SimpleFile
                     .put(name)
                     .put(0)
                     .update(sql);
-            con.commit();
+            SQLUtils.commit(con);
             JDBCExecutor.connect(con)
                     .put(parent.getId())
                     .put(name)
                     .put("create")
                     .update("INSERT INTO cfs_modification (parent,name,modType) VALUES (?,?,(SELECT id FROM cfs_modtype mt WHERE mt.typeName=?))");
-            if(!con.getAutoCommit())
-            {
-                con.commit();
-            }
+            SQLUtils.commit(con);
             cached = true;
             cachedExist = true;
         } catch (SQLException ex)
