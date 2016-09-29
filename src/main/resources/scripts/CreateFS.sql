@@ -15,9 +15,7 @@ CREATE TABLE IF NOT EXISTS cfs_directory(
   name VARCHAR(255) NOT NULL
   );
   
-ALTER TABLE cfs_directory DROP PRIMARY KEY;
- ALTER TABLE cfs_directory ADD PRIMARY KEY(parent,name);
- ALTER TABLE cfs_directory ADD UNIQUE KEY(id);
+ ALTER TABLE cfs_directory ADD UNIQUE KEY(parent,name);
 
 CREATE TABLE IF NOT EXISTS cfs_file(
   parent BIGINT NOT NULL,
@@ -43,7 +41,7 @@ CREATE TABLE IF NOT EXISTS cfs_modification(
     modTime TIMESTAMP default CURRENT_TIMESTAMP,
     consumed BOOLEAN DEFAULT FALSE,
 
-    FOREIGN KEY (name,parent) REFERENCES cfs_file(name,parent),
+    FOREIGN KEY (parent,name) REFERENCES cfs_file(parent,name),
     FOREIGN KEY (modType) REFERENCES cfs_modtype(id),
     CONSTRAINT cfs_mod_ok PRIMARY KEY(name,parent,modTime)
 );
@@ -51,6 +49,3 @@ CREATE TABLE IF NOT EXISTS cfs_modification(
 INSERT INTO cfs_modtype (id,typeName) VALUES (0,'create');
 INSERT INTO cfs_modtype (id,typeName) VALUES (1,'delete');
 INSERT INTO cfs_modtype (id,typeName) VALUES (2,'modify');
-
-COMMIT;
-
