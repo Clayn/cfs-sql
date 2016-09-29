@@ -15,6 +15,7 @@ import net.bplaced.clayn.cfs.FileSettings;
 import net.bplaced.clayn.cfs.SimpleFileSettings;
 import net.bplaced.clayn.cfs.impl.sql.util.DBChecker;
 import net.bplaced.clayn.cfs.impl.sql.util.DatabaseIntegrityException;
+import net.bplaced.clayn.cfs.impl.sql.util.SQLUtils;
 import net.bplaced.clayn.cfs.impl.sql.util.Script;
 import net.bplaced.clayn.cfs.impl.sql.util.ScriptList;
 import net.bplaced.clayn.cfs.impl.sql.util.ScriptLoader2;
@@ -56,8 +57,7 @@ public class SQLCFileSystem implements CFileSystem
         try
         {
             checkIntegrity();
-        }
-        catch(DatabaseIntegrityException ex)
+        } catch (DatabaseIntegrityException ex)
         {
             createTables();
         }
@@ -85,14 +85,15 @@ public class SQLCFileSystem implements CFileSystem
 
     private void checkIntegrity()
     {
-        if(!DBChecker.tableExists(dbAccess.get(), FILE_TABLE)||!DBChecker.tableExists(
+        if (!DBChecker.tableExists(dbAccess.get(), FILE_TABLE) || !DBChecker.tableExists(
                 dbAccess.get(), DIRECTORY_TABLE))
         {
-            throw new DatabaseIntegrityException("The integrity of the database can't be ensured anymore. "
+            throw new DatabaseIntegrityException(
+                    "The integrity of the database can't be ensured anymore. "
                     + "Possible reason: either file or directory table can't be found");
         }
     }
-    
+
     private void createTables() throws SQLException
     {
         try (Connection con = dbAccess.get())
@@ -105,11 +106,7 @@ public class SQLCFileSystem implements CFileSystem
                     stat.executeUpdate();
                 }
             }
-            con.commit();
-            if (!con.getAutoCommit())
-            {
-                con.commit();
-            }
+            SQLUtils.commit(con);
         }
     }
 

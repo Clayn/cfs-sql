@@ -23,6 +23,7 @@ import net.bplaced.clayn.cfs.FileModification;
 import net.bplaced.clayn.cfs.SimpleFile;
 import net.bplaced.clayn.cfs.SimpleFileFilter;
 import net.bplaced.clayn.cfs.impl.sql.util.JDBCExecutor;
+import net.bplaced.clayn.cfs.impl.sql.util.SQLUtils;
 import net.bplaced.clayn.cfs.impl.sql.util.ScriptLoader;
 import net.bplaced.clayn.cfs.util.IOUtils;
 
@@ -239,8 +240,6 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
         List<SimpleFile> files = new ArrayList<>();
         try (Connection con = dbAccess.get())
         {
-            boolean old = con.getAutoCommit();
-            con.setAutoCommit(false);
             try (PreparedStatement stat = con.prepareStatement(
                     GET_FILES_WITH_PARENT))
             {
@@ -254,7 +253,6 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
                                         this,
                                         dbAccess));
                     }
-                    con.setAutoCommit(old);
                 }
             }
         } catch (SQLException ex)
@@ -313,7 +311,7 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
 
                 }
             }
-            con.commit();
+            SQLUtils.commit(con);
             con.setAutoCommit(old);
         } catch (SQLException ex)
         {

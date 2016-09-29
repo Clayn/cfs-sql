@@ -1,5 +1,6 @@
 package net.bplaced.clayn.cfs.impl.sql;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import net.bplaced.clayn.cfs.Directory;
 import net.bplaced.clayn.cfs.SimpleFile;
 import net.bplaced.clayn.cfs.impl.sql.util.JDBCExecutor;
+import net.bplaced.clayn.cfs.impl.sql.util.SQLUtils;
 import net.bplaced.clayn.cfs.impl.sql.util.ScriptLoader;
 
 /**
@@ -114,14 +116,16 @@ public class SQLSimpleFileImpl implements SimpleFile
                     .put(name)
                     .put("create")
                     .update("INSERT INTO cfs_modification (parent,name,modType) VALUES (?,?,(SELECT id FROM cfs_modtype mt WHERE mt.typeName=?))");
-            con.commit();
+            if(!con.getAutoCommit())
+            {
+                con.commit();
+            }
             cached = true;
             cachedExist = true;
         } catch (SQLException ex)
         {
             Logger.getLogger(SQLSimpleFileImpl.class.getName()).log(Level.SEVERE,
                     null, ex);
-            System.out.println(name);
             throw new IOException(ex);
         }
     }
@@ -145,7 +149,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                 stat.setString(2, name);
                 stat.executeUpdate();
             }
-            con.commit();
+            SQLUtils.commit(con);
         } catch (SQLException ex)
         {
             Logger.getLogger(SQLSimpleFileImpl.class.getName()).log(Level.SEVERE,
@@ -176,9 +180,6 @@ public class SQLSimpleFileImpl implements SimpleFile
                 {
                     in = set.getBinaryStream("data");
                 }
-                con.commit();
-                con.setAutoCommit(old);
-                set.close();
             }
         } catch (SQLException ex)
         {
@@ -186,7 +187,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                     null, ex);
             throw new IOException(ex);
         }
-        return in;
+        return in==null?new ByteArrayInputStream(new byte[0]):in;
     }
 
     @Override
@@ -294,7 +295,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                             stat.setLong(3, parent.getId());
                             stat.setString(4, name);
                             stat.executeUpdate();
-                            con.commit();
+                            SQLUtils.commit(con);
                         }
                     } catch (SQLException ex)
                     {

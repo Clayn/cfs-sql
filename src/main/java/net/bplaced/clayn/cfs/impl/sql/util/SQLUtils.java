@@ -16,39 +16,29 @@
  */
 package net.bplaced.clayn.cfs.impl.sql.util;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
- * Exception thrown in cases where the integrity of the databse can't be ensured
- * anymore.
  *
  * @author Clayn <clayn_osmato@gmx.de>
- * @since 0.2.0
  */
-public class DatabaseIntegrityException extends RuntimeException
+public final class SQLUtils
 {
-
-    public DatabaseIntegrityException()
+    /**
+     * Commits all transactions that were done with the given connection. 
+     * If the connection has autocommit enabled or is closed, this method does 
+     * nothing. Some JDBC Drivers will fail to call {@link Connection#commit() commit()} 
+     * when autocommit is enabled. 
+     * 
+     * @param con the connection which transactions should be commited
+     * @throws SQLException if the commiting failed
+     */
+    public static final void commit(Connection con) throws SQLException
     {
+        if(!con.isClosed()&&!con.getAutoCommit())
+        {
+            con.commit();
+        }
     }
-
-    public DatabaseIntegrityException(String message)
-    {
-        super(message);
-    }
-
-    public DatabaseIntegrityException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-
-    public DatabaseIntegrityException(Throwable cause)
-    {
-        super(cause);
-    }
-
-    public DatabaseIntegrityException(String message, Throwable cause,
-            boolean enableSuppression, boolean writableStackTrace)
-    {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-
 }

@@ -22,46 +22,50 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * The DBChecker is a toolset to verify the integrity of a database. The available 
- * checks will be extended in further releases.
+ * The DBChecker is a toolset to verify the integrity of a database. The
+ * available checks will be extended in further releases.
+ *
  * @author Clayn <clayn_osmato@gmx.de>
- * @since 0.2
+ * @since 0.2.0
  */
 public final class DBChecker
 {
-    
+
     private DBChecker()
     {
-        throw new UnsupportedOperationException("Creating a DBChecker is forbidden");
+        throw new UnsupportedOperationException(
+                "Creating a DBChecker is forbidden");
     }
+
     /**
-     * Checks wether or not there exists a table with the given name in the given 
-     * database. This method checks the connections metadata to go through 
+     * Checks wether or not there exists a table with the given name in the
+     * given database. This method checks the connections metadata to go through
      * the available tables.
+     *
      * @param con the database where to search for the table
      * @param tableName the table to search for
-     * @return {@code true} if and only if the table could be found in the metadata, 
-     * {@code false} otherwise or when an exception occures.
+     * @return {@code true} if and only if the table could be found in the
+     * metadata, {@code false} otherwise or when an exception occures.
      */
     public static boolean tableExists(Connection con, String tableName)
     {
-        try(Connection c=con)
+        try (Connection c = con)
         {
-            DatabaseMetaData data=c.getMetaData();
+            DatabaseMetaData data = c.getMetaData();
             try (ResultSet set = data.getTables(null, null, "%", null))
             {
-                boolean found=false;
-                while(set.next())
+                boolean found = false;
+                while (set.next())
                 {
-                    found=set.getString(3).equals(tableName);
-                    if(found)
+                    found = set.getString(3).equals(tableName);
+                    if (found)
                     {
                         break;
                     }
                 }
                 return found;
             }
-            
+
         } catch (SQLException ex)
         {
             return false;
