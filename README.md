@@ -1,5 +1,9 @@
 # Clayn FileSystem SQL Implementation
 
+This is a implementation of the CFS that works on a SQL Database. Because different database engines behave different there is no guarantee this implementation works for everyone in the current version. 
+All databases that were used for tests will be listed though. 
+
+In the future the implementation should be more flexible in how to connect and configure the database connection.
 
 #### Tested with
 
