@@ -15,6 +15,7 @@ import net.bplaced.clayn.cfs.FileSettings;
 import net.bplaced.clayn.cfs.SimpleFileSettings;
 import net.bplaced.clayn.cfs.impl.sql.util.DBChecker;
 import net.bplaced.clayn.cfs.impl.sql.util.DatabaseIntegrityException;
+import net.bplaced.clayn.cfs.impl.sql.util.SQLUtils;
 import net.bplaced.clayn.cfs.impl.sql.util.Script;
 import net.bplaced.clayn.cfs.impl.sql.util.ScriptList;
 import net.bplaced.clayn.cfs.impl.sql.util.ScriptLoader2;
@@ -105,11 +106,7 @@ public class SQLCFileSystem implements CFileSystem
                     stat.executeUpdate();
                 }
             }
-            con.commit();
-            if (!con.getAutoCommit())
-            {
-                con.commit();
-            }
+            SQLUtils.commit(con);
         }
     }
 
