@@ -12,9 +12,14 @@ In the future the implementation should be more flexible in how to connect and c
 - Mac OS X El Capitan (64 bit) 
 - Linux Mint 18 (64 bit)
 
+###### Databases (DBMS)
+- H2 (1.4.192)
+- MySQL (5.7.15-0ubuntu0.16.04-1
+
 ###### Databases (JDBC Driver)
 - H2 (1.4.192)
 - MySQL (6.0.4)
+
 
 
 JUnit Tests are using H2 in version 1.4.192 for the tests
