@@ -19,6 +19,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import net.bplaced.clayn.cfs.Directory;
+import net.bplaced.clayn.cfs.FileAttributes;
 import net.bplaced.clayn.cfs.SimpleFile;
 import net.bplaced.clayn.cfs.impl.sql.util.JDBCExecutor;
 import net.bplaced.clayn.cfs.impl.sql.util.SQLUtils;
@@ -41,6 +42,7 @@ public class SQLSimpleFileImpl implements SimpleFile
     private final Supplier<Connection> dbAccess;
     private boolean cachedExist = false;
     private boolean cached = false;
+    private final SQLFileAttributes attributes;
 
     static
     {
@@ -50,11 +52,17 @@ public class SQLSimpleFileImpl implements SimpleFile
     }
 
     public SQLSimpleFileImpl(String name, SQLDirectoryImpl parent,
-            Supplier<Connection> dbAccess)
+            Supplier<Connection> dbAccess) throws IOException
     {
         this.name = name;
         this.parent = parent;
         this.dbAccess = dbAccess;
+        this.attributes = new SQLFileAttributes(this);
+    }
+
+    Supplier<Connection> getDbAccess()
+    {
+        return dbAccess;
     }
 
     @Override
@@ -103,6 +111,7 @@ public class SQLSimpleFileImpl implements SimpleFile
         }
 
         String sql = "INSERT INTO " + SQLCFileSystem.FILE_TABLE + " (parent,name,bytes) VALUES (?,?,?)";
+        long time = -1;
         try (Connection con = dbAccess.get())
         {
             JDBCExecutor.connect(con)
@@ -110,6 +119,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                     .put(name)
                     .put(0)
                     .update(sql);
+            time = System.currentTimeMillis();
             SQLUtils.commit(con);
             JDBCExecutor.connect(con)
                     .put(parent.getId())
@@ -124,6 +134,10 @@ public class SQLSimpleFileImpl implements SimpleFile
             Logger.getLogger(SQLSimpleFileImpl.class.getName()).log(Level.SEVERE,
                     null, ex);
             throw new IOException(ex);
+        }
+        if (time != -1)
+        {
+            attributes.setCreated(time);
         }
     }
 
@@ -184,7 +198,8 @@ public class SQLSimpleFileImpl implements SimpleFile
                     null, ex);
             throw new IOException(ex);
         }
-        return in==null?new ByteArrayInputStream(new byte[0]):in;
+        attributes.setUsed(System.currentTimeMillis());
+        return in == null ? new ByteArrayInputStream(new byte[0]) : in;
     }
 
     @Override
@@ -256,6 +271,8 @@ public class SQLSimpleFileImpl implements SimpleFile
                     super.close();
                     LOG.info("Wait for the reader thread to finish");
                     reader.get().join();
+                    attributes.setLastModified(System.currentTimeMillis());
+                    
                 } catch (InterruptedException ex)
                 {
                     Logger.getLogger(SQLSimpleFileImpl.class.getName()).log(
@@ -282,6 +299,7 @@ public class SQLSimpleFileImpl implements SimpleFile
         Thread t = new Thread(()
                 -> 
                 {
+                    long time = -1;
                     try (Connection con = dbAccess.get())
                     {
                         String sql = "UPDATE cfs_file SET data=?,bytes=? WHERE parent=? AND name=?";
@@ -292,6 +310,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                             stat.setLong(3, parent.getId());
                             stat.setString(4, name);
                             stat.executeUpdate();
+                            time = System.currentTimeMillis();
                             SQLUtils.commit(con);
                         }
                     } catch (SQLException ex)
@@ -300,6 +319,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                                 Level.SEVERE, null, ex);
                         throw new RuntimeException(ex);
                     }
+                    
 
         });
         reader.set(t);
@@ -337,6 +357,12 @@ public class SQLSimpleFileImpl implements SimpleFile
     public String toString()
     {
         return parent.toString() + name;
+    }
+
+    @Override
+    public FileAttributes getFileAttributes()
+    {
+        return attributes;
     }
 
 }
