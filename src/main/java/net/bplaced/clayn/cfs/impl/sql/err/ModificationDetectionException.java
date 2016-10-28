@@ -14,32 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.bplaced.clayn.cfs.impl.sql.util;
+package net.bplaced.clayn.cfs.impl.sql.err;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import net.bplaced.clayn.cfs.err.CFSException;
 
 /**
  *
  * @author Clayn <clayn_osmato@gmx.de>
  */
-public final class SQLUtils
+public class ModificationDetectionException extends CFSException
 {
-    /**
-     * Commits all transactions that were done with the given connection. 
-     * If the connection has autocommit enabled or is closed, this method does 
-     * nothing. Some JDBC Drivers will fail to call {@link Connection#commit() commit()} 
-     * when autocommit is enabled. 
-     * 
-     * @param con the connection which transactions should be commited
-     * @throws SQLException if the commiting failed
-     * @since 0.3.0
-     */
-    public static final void commit(Connection con) throws SQLException
+
+    public ModificationDetectionException()
     {
-        if(!con.isClosed()&&!con.getAutoCommit())
-        {
-            con.commit();
-        }
     }
+
+    public ModificationDetectionException(String message)
+    {
+        super(message);
+    }
+
+    public ModificationDetectionException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public ModificationDetectionException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    public ModificationDetectionException(String message, Throwable cause,
+            boolean enableSuppression, boolean writableStackTrace)
+    {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+    
 }

@@ -20,8 +20,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.function.Supplier;
-import net.bplaced.clayn.cfs.err.CFSException;
 import net.bplaced.clayn.cfs.impl.sql.SQLCFileSystem;
+import net.bplaced.clayn.cfs.impl.sql.err.DBAccessException;
 
 /**
  * This class wraps connection informations for a database and can be used 
@@ -35,6 +35,14 @@ public class DBSupplier implements Supplier<Connection>
     private final String user;
     private final String password;
 
+    /**
+     * Creates a new DBSupplier that uses the given url, user and password 
+     * to open jdbc connections. 
+     * @param url the url for the database
+     * @param user the user that should connect
+     * @param password the password for that user
+     * @since 0.3.0
+     */
     public DBSupplier(String url, String user, String password)
     {
         this.url = url;
@@ -43,7 +51,12 @@ public class DBSupplier implements Supplier<Connection>
     }
     
     
-    
+    /**
+     * Returns a new connection using the stored connection informations.
+     * @return a new jdbc connection
+     * @since 0.3.0
+     * @throws DBAccessException if the connection could not be established.
+     */
     @Override
     public Connection get()
     {
@@ -52,7 +65,7 @@ public class DBSupplier implements Supplier<Connection>
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException ex)
         {
-            throw new CFSException(ex);
+            throw new DBAccessException(ex);
         }
     }
     

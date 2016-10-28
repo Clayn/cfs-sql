@@ -3,11 +3,6 @@
  * Created: 06.07.2016
  */
 
-DROP TABLE IF EXISTS cfs_file;
-DROP TABLE IF EXISTS cfs_directory;
-DROP TABLE IF EXISTS cfs_modtype;
-DROP TABLE IF EXISTS cfs_modification;
-
 CREATE TABLE IF NOT EXISTS cfs_directory(
   root BOOLEAN DEFAULT false,
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -25,6 +20,16 @@ CREATE TABLE IF NOT EXISTS cfs_file(
 
   
   FOREIGN KEY (parent) REFERENCES cfs_directory(id),
+  PRIMARY KEY(parent,name)
+);
+
+CREATE TABLE IF NOT EXISTS cfs_attribute(
+  parent BIGINT,
+  name VARCHAR(255),
+  created BIGINT DEFAULT -1,
+  lastMod BIGINT DEFAULT -1,
+  lastUsed BIGINT DEFAULT -1,
+
   PRIMARY KEY(parent,name)
 );
 

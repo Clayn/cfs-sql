@@ -22,6 +22,7 @@ import net.bplaced.clayn.cfs.Directory;
 import net.bplaced.clayn.cfs.FileModification;
 import net.bplaced.clayn.cfs.SimpleFile;
 import net.bplaced.clayn.cfs.SimpleFileFilter;
+import net.bplaced.clayn.cfs.impl.sql.err.ModificationDetectionException;
 import net.bplaced.clayn.cfs.impl.sql.util.JDBCExecutor;
 import net.bplaced.clayn.cfs.impl.sql.util.SQLUtils;
 import net.bplaced.clayn.cfs.impl.sql.util.ScriptLoader;
@@ -110,13 +111,9 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
                                                 SQLDirectoryImpl.this::dispatchModification);
                             }
                             stat.close();
-                        } catch (SQLException ex)
+                        } catch (IOException | SQLException ex)
                         {
-                            Logger.getLogger(
-                                    SQLDirectoryImpl.class.getName()).log(
-                                            Level.SEVERE,
-                                            null, ex);
-                            throw new RuntimeException(ex);
+                            throw new ModificationDetectionException(ex);
                         }
                         Thread.sleep(500);
                     } catch (InterruptedException ex)
