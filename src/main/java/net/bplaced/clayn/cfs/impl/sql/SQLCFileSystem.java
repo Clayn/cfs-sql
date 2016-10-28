@@ -178,4 +178,27 @@ public class SQLCFileSystem implements CFileSystem
         return SETTINGS;
     }
 
+    @Override
+    public CFileSystem subFileSystem(String dir) throws IOException
+    {
+        SQLDirectoryImpl impl=(SQLDirectoryImpl) getDirectory(dir);
+        impl.mkDirs();
+        SQLDirectoryImpl nRoot=new SQLDirectoryImpl(impl.getName(), null, dbAccess, impl.getId());
+        try
+        {
+            return new SQLCFileSystem(dbAccess)
+            {
+                @Override
+                public Directory getRoot() throws IOException
+                {
+                    return nRoot;
+                }
+                
+            };
+        } catch (SQLException sQLException)
+        {
+            throw new IOException(sQLException);
+        }
+    }
+
 }
