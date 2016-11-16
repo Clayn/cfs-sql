@@ -365,4 +365,10 @@ public class SQLSimpleFileImpl implements SimpleFile
         return attributes;
     }
 
+    @Override
+    public String getPath()
+    {
+        String pPath=parent.getPath();
+        return pPath.endsWith("/")?pPath:pPath+"/";
+    }
 }
