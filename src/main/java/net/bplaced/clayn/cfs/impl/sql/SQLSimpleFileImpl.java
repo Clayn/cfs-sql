@@ -365,4 +365,9 @@ public class SQLSimpleFileImpl implements SimpleFile
         return attributes;
     }
 
+    @Override
+    public String getPath()
+    {
+        return toString();
+    }
 }

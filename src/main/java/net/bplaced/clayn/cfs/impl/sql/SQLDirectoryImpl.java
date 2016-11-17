@@ -453,4 +453,10 @@ public class SQLDirectoryImpl extends AbstractActiveDirectory
             throw new IOException(ex);
         }
     }
+
+    @Override
+    public String getPath()
+    {
+        return toString();
+    }
 }
