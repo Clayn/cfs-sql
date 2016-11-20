@@ -25,19 +25,20 @@ import java.sql.SQLException;
  */
 public final class SQLUtils
 {
+
     /**
-     * Commits all transactions that were done with the given connection. 
-     * If the connection has autocommit enabled or is closed, this method does 
-     * nothing. Some JDBC Drivers will fail to call {@link Connection#commit() commit()} 
-     * when autocommit is enabled. 
-     * 
+     * Commits all transactions that were done with the given connection. If the
+     * connection has autocommit enabled or is closed, this method does nothing.
+     * Some JDBC Drivers will fail to call {@link Connection#commit() commit()}
+     * when autocommit is enabled.
+     *
      * @param con the connection which transactions should be commited
      * @throws SQLException if the commiting failed
      * @since 0.3.0
      */
     public static final void commit(Connection con) throws SQLException
     {
-        if(!con.isClosed()&&!con.getAutoCommit())
+        if (!con.isClosed() && !con.getAutoCommit())
         {
             con.commit();
         }
