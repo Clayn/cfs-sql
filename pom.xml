@@ -114,4 +114,7 @@
         </dependency>
     </dependencies>
     <name>Clayn File System SQL-Impl</name>
+    <description>An implementation of the CFileSystem that uses a SQL Database for storing the files and additional informations. 
+While the sql statements should work on all SQL databases they may fail since not all databases will be tested. 
+</description>
 </project>
