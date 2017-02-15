@@ -49,5 +49,5 @@ public class DBAccessException extends CFSException
     {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

@@ -49,5 +49,5 @@ public class ModificationDetectionException extends CFSException
     {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-    
+
 }

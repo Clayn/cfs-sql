@@ -26,8 +26,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Utility class to convert SQL Statements from a source into a
+ * {@link ScriptList}. This can be used to not have any sql scripts hardcoded in
+ * your code. The scripts may be named.
  *
  * @author Clayn
+ * @since 0.3.0
  */
 public class ScriptLoader2
 {
@@ -36,6 +40,19 @@ public class ScriptLoader2
     private static final String MULTI = "(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)";
     private static final Pattern NAME = Pattern.compile("\\[(.*)\\]");
 
+    /**
+     * Attempts to load all Scripts from the given source into a ScriptList. The
+     * Scripts can be named using {@code [Name]}. If no such tag was found, a
+     * name will be generated in the format {@code Script_%d} where the number
+     * will be the statements position {@code 0} indexed. This counter will be
+     * incremented in any case. A statement will be read until a {@code ;} was 
+     * found. Comments will be ignored.
+     *
+     * @param in the source to read the scripts from
+     * @return a scriptlist with all sql statements found.
+     * @throws IOException if an I/O Exception occures
+     * @since 0.3.0
+     */
     public static ScriptList loadScripts(InputStream in) throws IOException
     {
         List<Script> scripts = new ArrayList<>();

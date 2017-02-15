@@ -69,7 +69,7 @@ public class JDBCExecutor
         parameters.put(index++, para);
         return this;
     }
-
+    
     @SuppressFBWarnings
     private PreparedStatement prepare(String sql) throws SQLException
     {

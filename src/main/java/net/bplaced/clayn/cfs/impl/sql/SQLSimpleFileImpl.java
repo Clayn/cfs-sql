@@ -272,7 +272,7 @@ public class SQLSimpleFileImpl implements SimpleFile
                     LOG.info("Wait for the reader thread to finish");
                     reader.get().join();
                     attributes.setLastModified(System.currentTimeMillis());
-                    
+
                 } catch (InterruptedException ex)
                 {
                     Logger.getLogger(SQLSimpleFileImpl.class.getName()).log(
@@ -319,7 +319,6 @@ public class SQLSimpleFileImpl implements SimpleFile
                                 Level.SEVERE, null, ex);
                         throw new RuntimeException(ex);
                     }
-                    
 
         });
         reader.set(t);

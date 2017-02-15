@@ -24,20 +24,23 @@ import net.bplaced.clayn.cfs.impl.sql.SQLCFileSystem;
 import net.bplaced.clayn.cfs.impl.sql.err.DBAccessException;
 
 /**
- * This class wraps connection informations for a database and can be used 
- * for creating a {@link SQLCFileSystem}.
+ * This class wraps connection informations for a database and can be used for
+ * creating a {@link SQLCFileSystem}.
+ *
  * @author Clayn <clayn_osmato@gmx.de>
  * @since 0.3.0
  */
 public class DBSupplier implements Supplier<Connection>
 {
+
     private final String url;
     private final String user;
     private final String password;
 
     /**
-     * Creates a new DBSupplier that uses the given url, user and password 
-     * to open jdbc connections. 
+     * Creates a new DBSupplier that uses the given url, user and password to
+     * open jdbc connections.
+     *
      * @param url the url for the database
      * @param user the user that should connect
      * @param password the password for that user
@@ -49,10 +52,10 @@ public class DBSupplier implements Supplier<Connection>
         this.user = user;
         this.password = password;
     }
-    
-    
+
     /**
      * Returns a new connection using the stored connection informations.
+     *
      * @return a new jdbc connection
      * @since 0.3.0
      * @throws DBAccessException if the connection could not be established.
@@ -68,5 +71,5 @@ public class DBSupplier implements Supplier<Connection>
             throw new DBAccessException(ex);
         }
     }
-    
+
 }

@@ -42,38 +42,41 @@ public class SQLFileAttributes implements FileAttributes
     public SQLFileAttributes(SQLSimpleFileImpl file) throws IOException
     {
         this.file = file;
-        try(InputStream in=getClass().getResourceAsStream("/scripts/FileScripts.sql"))
+        try (InputStream in = getClass().getResourceAsStream(
+                "/scripts/FileScripts.sql"))
         {
-            scripts=ScriptLoader2.loadScripts(in);
+            scripts = ScriptLoader2.loadScripts(in);
         }
         if (!checkExistence())
         {
             create();
         }
     }
-    
+
     private boolean checkExistence()
     {
-        try(Connection con=file.getDbAccess().get())
+        try (Connection con = file.getDbAccess().get())
         {
-            PreparedStatement stat=con.prepareStatement(scripts.getScript("Get Attributes").getSql());
+            PreparedStatement stat = con.prepareStatement(scripts.getScript(
+                    "Get Attributes").getSql());
             stat.setString(1, file.getName());
-            stat.setLong(2, ((SQLDirectoryImpl)file.getParent()).getId());
-            ResultSet res=stat.executeQuery();
+            stat.setLong(2, ((SQLDirectoryImpl) file.getParent()).getId());
+            ResultSet res = stat.executeQuery();
             return res.next();
         } catch (SQLException ex)
         {
             throw new CFSException(ex);
         }
     }
-    
+
     private void create()
     {
-        try(Connection con=file.getDbAccess().get())
+        try (Connection con = file.getDbAccess().get())
         {
-            PreparedStatement stat=con.prepareStatement(scripts.getScript("Create").getSql());
+            PreparedStatement stat = con.prepareStatement(scripts.getScript(
+                    "Create").getSql());
             stat.setString(1, file.getName());
-            stat.setLong(2, ((SQLDirectoryImpl)file.getParent()).getId());
+            stat.setLong(2, ((SQLDirectoryImpl) file.getParent()).getId());
             stat.executeUpdate();
             SQLUtils.commit(con);
         } catch (SQLException ex)
@@ -81,46 +84,53 @@ public class SQLFileAttributes implements FileAttributes
             throw new CFSException(ex);
         }
     }
-    
+
     void setLastModified(long time)
     {
-        if(time<0)
+        if (time < 0)
+        {
             return;
+        }
         setValue("Set modtime", time);
     }
-    
+
     void setCreated(long time)
     {
-        System.out.println("Set creation to: "+time);
-        if(time<0)
+        System.out.println("Set creation to: " + time);
+        if (time < 0)
+        {
             return;
+        }
         setValue("Set createtime", time);
-        
+
     }
-    
+
     void setUsed(long time)
     {
-        if(time<0)
+        if (time < 0)
+        {
             return;
+        }
         setValue("Set usetime", time);
     }
-    
+
     private void setValue(String script, long value)
     {
-        try(Connection con=file.getDbAccess().get())
+        try (Connection con = file.getDbAccess().get())
         {
-            PreparedStatement stat=con.prepareStatement(scripts.getScript(script).getSql());
+            PreparedStatement stat = con.prepareStatement(scripts.getScript(
+                    script).getSql());
             stat.setLong(1, value);
             stat.setString(2, file.getName());
-            stat.setLong(3, ((SQLDirectoryImpl)file.getParent()).getId());
-            int res=stat.executeUpdate();
+            stat.setLong(3, ((SQLDirectoryImpl) file.getParent()).getId());
+            int res = stat.executeUpdate();
             SQLUtils.commit(con);
         } catch (SQLException ex)
         {
             throw new CFSException(ex);
         }
     }
-    
+
     @Override
     public long lastModified()
     {
@@ -132,25 +142,27 @@ public class SQLFileAttributes implements FileAttributes
     {
         return getValueFor("created");
     }
+
     private long getValueFor(String column)
     {
-        try(Connection con=file.getDbAccess().get())
+        try (Connection con = file.getDbAccess().get())
         {
             Script sc = scripts.getScript("Get Attributes");
-            PreparedStatement stat=con.prepareStatement(sc.getSql());
+            PreparedStatement stat = con.prepareStatement(sc.getSql());
             stat.setString(1, file.getName());
-            stat.setLong(2, ((SQLDirectoryImpl)file.getParent()).getId());
-            ResultSet res=stat.executeQuery();
-            return res.next()?res.getLong(column):-1;
+            stat.setLong(2, ((SQLDirectoryImpl) file.getParent()).getId());
+            ResultSet res = stat.executeQuery();
+            return res.next() ? res.getLong(column) : -1;
         } catch (SQLException ex)
         {
             throw new CFSException(ex);
         }
     }
+
     @Override
     public long lastUsed()
     {
         return getValueFor("lastUsed");
     }
-    
+
 }
