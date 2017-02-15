@@ -8,6 +8,7 @@ import java.util.function.Supplier;
  * @author Clayn
  * @since 0.1
  * @version $Revision: 332 $
+ * @deprecated Not used in future releases
  */
 public class PreLoadScripts
 {

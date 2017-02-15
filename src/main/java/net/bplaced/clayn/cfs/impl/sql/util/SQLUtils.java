@@ -20,12 +20,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
+ * Class for utility functions that target databases and general sql.
  *
  * @author Clayn <clayn_osmato@gmx.de>
+ * @since 0.3.0
  */
 public final class SQLUtils
 {
 
+    private SQLUtils() throws IllegalAccessException
+    {
+        throw new IllegalAccessException("No SQLUtils for you!");
+    }
+
+    
     /**
      * Commits all transactions that were done with the given connection. If the
      * connection has autocommit enabled or is closed, this method does nothing.

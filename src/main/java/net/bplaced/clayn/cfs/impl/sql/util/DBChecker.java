@@ -40,7 +40,7 @@ public final class DBChecker
     /**
      * Checks wether or not there exists a table with the given name in the
      * given database. This method checks the connections metadata to go through
-     * the available tables.
+     * the available tables. The connection will be closed afterwards.
      *
      * @param con the database where to search for the table
      * @param tableName the table to search for
